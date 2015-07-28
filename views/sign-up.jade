@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    h1 Sign Up
+    if errors
+      ul
+        each err in errors
+          li(style='color: red; list-style-type: none')= err
+    form(action='/tube/sign-up', method='POST')
+      div.row
+        label(for='user-name') User Name:
+          input#user-name(type='text', name='userName')
+      div.row
+        label(for='email') Email:
+          input#email(type='email', name='email')
+      div.row
+        label(for='password') Password:
+          input#password(type='password', name='password')
+      div.row
+        label(for='pass-check') Confirm Password:
+          input#pass-check(type='password', name='passwordCheck')
+      input(type='submit', value='Sign Up')
+    a(href='/') Home
+    br
+    a(href='#') To All Videos

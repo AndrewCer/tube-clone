@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    div.login-box
+      form(action='/', method='POST')
+        label(for='user-name') User Name:
+          input#user-name(type='text', name='userName')
+        label(for='password') Password:
+          input#password(type='password', name='password')
+        input(type='submit', value='Login')
+      a(href='/tube/sign-up') Sign Up
+    block content
