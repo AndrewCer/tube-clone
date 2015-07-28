@@ -10,19 +10,34 @@ html
         each err in errors
           li(style='color: red; list-style-type: none')= err
     form(action='/tube/sign-up', method='POST')
-      div.row
-        label(for='user-name') User Name:
-          input#user-name(type='text', name='userName')
-      div.row
-        label(for='email') Email:
-          input#email(type='email', name='email')
-      div.row
-        label(for='password') Password:
-          input#password(type='password', name='password')
-      div.row
-        label(for='pass-check') Confirm Password:
-          input#pass-check(type='password', name='passwordCheck')
-      input(type='submit', value='Sign Up')
+      if formData
+        div.row
+          label(for='user-name') User Name:
+            input#user-name(type='text', name='userName', value= formData.userName)
+        div.row
+          label(for='age') Age:
+            input#age(type='number', name='age', value= formData.age)
+        div.row
+          label(for='password') Password:
+            input#password(type='password', name='password')
+        div.row
+          label(for='pass-check') Confirm Password:
+            input#pass-check(type='password', name='passwordCheck')
+        input(type='submit', value='Sign Up')
+      else
+        div.row
+          label(for='user-name') User Name:
+            input#user-name(type='text', name='userName')
+        div.row
+          label(for='age') Age:
+            input#age(type='number', name='age')
+        div.row
+          label(for='password') Password:
+            input#password(type='password', name='password')
+        div.row
+          label(for='pass-check') Confirm Password:
+            input#pass-check(type='password', name='passwordCheck')
+        input(type='submit', value='Sign Up')
     a(href='/') Home
     br
     a(href='#') To All Videos
