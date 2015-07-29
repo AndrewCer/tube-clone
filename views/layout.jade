@@ -5,11 +5,20 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     div.login-box
-      form(action='/', method='POST')
+    if user
+      form(action='/tube/logout', method='POST')
+        input(type='submit', value='Logout')
+    else
+      form(action='/tube/login', method='POST')
+        if nameError
+          p= nameError
         label(for='user-name') User Name:
           input#user-name(type='text', name='userName')
+        if passwordError
+          p= passwordError
         label(for='password') Password:
           input#password(type='password', name='password')
         input(type='submit', value='Login')
       a(href='/tube/sign-up') Sign Up
+      br
     block content

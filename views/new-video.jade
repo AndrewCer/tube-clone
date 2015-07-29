@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 New Video
+  form(action='/tube/new-video', method='POST')
+    label(for='name') Name:
+      input#name(type='text', name=name)
+    label(for='url') Url
+      input#url(type='text', name=url)
+    label(for='')
+  a(href='#') To All Videos
+  br
+  a(href='/') Home
