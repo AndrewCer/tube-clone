@@ -1,6 +1,9 @@
 extends layout
 
 block content
-  a(href='#') To All Videos
+  a(href='/tube') To All Videos
   br
-  a(href='/tube/new-video') Add Video
+  if user
+    a(href='/tube/new-video') Add Video
+    br
+    a(href='/tube/user-page') User Dashboard

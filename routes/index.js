@@ -19,15 +19,22 @@ String.prototype.capitalize = function(){
 router.get('/', function(req, res, next) {
   var userCookie = req.session.user;
   if (req.session.user) {
-    userCookie = userCookie.capitalize();  
+    userCookie = userCookie.capitalize();
   }
   res.render('index', { title: 'Tube Clone', user: userCookie});
+});
+
+router.get('/tube', function (req, res) {
+  var userCookie = req.session.user;
+  videos.find({}).then(function (videos) {
+    res.render('tube-show', {allVideos:videos, user: userCookie});
+  });
 });
 
 router.get('/tube/user/:id', function (req, res) {
   var userCookie = req.session.user;
   userCookie = userCookie.capitalize();
-  res.render('user-page', {user: userCookie})
+  res.render('user-page', {user: userCookie, userId: req.params.id})
 });
 
 router.get('/tube/sign-up', function (req, res) {
@@ -78,15 +85,27 @@ router.post('/tube/logout', function (req, res) {
   res.redirect('/');
 });
 
-router.get('/tube/new-video', function (req, res) {
+router.get('/tube/new-video/:id', function (req, res) {
   var userCookie = req.session.user;
   if (userCookie) {
     userCookie = userCookie.capitalize();
-    res.render('new-video', {user: userCookie});
+    res.render('new-video', {user: userCookie, userId: req.params.id});
   }
   else {
     res.redirect('/tube/sign-up')
   }
 });
+
+router.post('/tube/new-video/:id', function (req, res) {
+  var formData = req.body
+  console.log(formData);
+  users.findOne({_id: req.params.id}).then(function (user) {
+    videos.insert(formData, {userId: user._id}).then(function (videos) {
+      res.redirect('/tube')
+    });
+  })
+});
+
+
 
 module.exports = router;

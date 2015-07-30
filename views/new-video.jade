@@ -2,12 +2,14 @@ extends layout
 
 block content
   h1 New Video
-  form(action='/tube/new-video', method='POST')
+  form(action='/tube/new-video/' + userId, method='POST')
     label(for='name') Name:
-      input#name(type='text', name=name)
-    label(for='url') Url
-      input#url(type='text', name=url)
-    label(for='')
+      input#name(type='text', name='name', autofocus)
+    label(for='url') Url (please use embeded URL)
+      input#url(type='text', name='url')
+    label(for='description') Description
+      textarea#description(name='description')
+    input(type='submit', value='Add Video')
   a(href='#') To All Videos
   br
   a(href='/') Home

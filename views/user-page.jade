@@ -2,6 +2,6 @@ extends layout
 
 block content
   h1 Welcome #{user}
-  a(href='#') To All Videos
+  a(href='/tube') To All Videos
   br
-  a(href='/tube/new-video') Add Video
+  a(href='/tube/new-video/' + userId) Add Video
