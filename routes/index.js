@@ -19,9 +19,16 @@ String.prototype.capitalize = function(){
 router.get('/', function(req, res, next) {
   var userCookie = req.session.user;
   if (req.session.user) {
-    userCookie = userCookie.capitalize();
+    users.findOne({userName: userCookie}).then(function (user) {
+      console.log(user);
+      userCookie = userCookie.capitalize();
+      return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id});
+    });
+
   }
-  res.render('index', { title: 'Tube Clone', user: userCookie});
+  else {
+    res.render('index', { title: 'Tube Clone'});
+  }
 });
 
 router.get('/tube', function (req, res) {

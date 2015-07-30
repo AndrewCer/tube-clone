@@ -4,6 +4,6 @@ block content
   a(href='/tube') To All Videos
   br
   if user
-    a(href='/tube/new-video') Add Video
+    a(href='/tube/new-video/' + userId) Add Video
     br
-    a(href='/tube/user-page') User Dashboard
+    a(href='/tube/user/' + userId) User Dashboard
