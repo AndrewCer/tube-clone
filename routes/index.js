@@ -40,7 +40,11 @@ router.get('/tube', function (req, res) {
 router.get('/tube/user/:id', function (req, res) {
   var userCookie = req.session.user;
   userCookie = userCookie.capitalize();
-  res.render('user-page', {user: userCookie, userId: req.params.id})
+  // console.log(req.params.id);
+  videos.find({userId: {$in:req.params.id}}).then(function (videos) {
+    console.log(videos);
+    res.render('user-page', {user: userCookie, userId: req.params.id})
+  });
 });
 
 router.get('/tube/sign-up', function (req, res) {
