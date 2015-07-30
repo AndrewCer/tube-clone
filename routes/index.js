@@ -20,7 +20,6 @@ router.get('/', function(req, res, next) {
   var userCookie = req.session.user;
   if (req.session.user) {
     users.findOne({userName: userCookie}).then(function (user) {
-      console.log(user);
       userCookie = userCookie.capitalize();
       return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id});
     });
@@ -105,9 +104,9 @@ router.get('/tube/new-video/:id', function (req, res) {
 
 router.post('/tube/new-video/:id', function (req, res) {
   var formData = req.body
-  console.log(formData);
   users.findOne({_id: req.params.id}).then(function (user) {
-    videos.insert(formData, {userId: user._id}).then(function (videos) {
+    formData.userId = user._id;
+    videos.insert(formData).then(function (videos) {
       res.redirect('/tube')
     });
   })

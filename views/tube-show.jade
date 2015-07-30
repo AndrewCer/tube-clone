@@ -3,13 +3,12 @@ extends layout
 block content
   h1 All Videos
   for vid in allVideos
-    h2
-      a(href='#')= vid.name
-    iframe(src=vid.url, height='390', width='480', title='YouTube Video Player')
+    .embeded-video
+      h2
+        a(href='#')= vid.name
+      iframe(src=vid.url, height='390', width='480', title='YouTube Video Player')
+      p Posted by: Fill in user name here!!!!!!#{postedBy}
   br
   a(href='/') Home
-
-
-//- https://www.youtube.com/embed/Z-PS7jmSiMY
-//- 
-//- https://www.youtube.com/embed/tYV2y89M5eQ
+  br
+  //- a(href='/tube/new-video/' + userId) Add Video

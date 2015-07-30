@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+.embeded-video {
+  display: inline-block;
+  padding-left: 20px;
+}
