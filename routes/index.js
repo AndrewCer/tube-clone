@@ -37,6 +37,11 @@ router.get('/tube', function (req, res) {
   });
 });
 
+//show video with comments
+// router.get('/tube/:vidId', function (req, res) {
+//   res.render('tube/')
+// });
+
 router.get('/tube/user/:id', function (req, res) {
   var userCookie = req.session.user;
   userCookie = userCookie.capitalize();
