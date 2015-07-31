@@ -45,6 +45,24 @@ router.get('/tube/video/:vidId', function (req, res) {
   });
 });
 
+router.get('/tube/video/edit/:vidId', function (req, res) {
+  var userCookie = req.session.user;
+  videos.findOne({_id: req.params.vidId}).then(function (video) {
+    res.render('video-edit', {user: userCookie, video: video})
+  });
+});
+
+router.post('/tube/video/edit/:vidId', function (req, res) {
+  var formData = req.body
+  videos.update({_id: req.params.vidId}, {name: formData.name, url: formData.url,
+    description: formData.description, userId: formData.userId})
+    .then(function () {
+    res.redirect('/tube/video/' + req.params.vidId)
+  });
+});
+
+
+
 router.get('/tube/user/:id', function (req, res) {
   var userCookie = req.session.user;
   userCookie = userCookie.capitalize();
