@@ -46,11 +46,11 @@ router.get('/tube/video/:vidId', function (req, res) {
 });
 
 router.get('/tube/video/edit/:vidId', function (req, res) {
-  var userCookie = req.session.user;
   if (!req.session.user || req.session.user != req.session.user) {
     res.render('404', {error: 'You do not have access to this page'})
   }
   else {
+    var userCookie = req.session.user;
     videos.findOne({_id: req.params.vidId}).then(function (video) {
       res.render('video-edit', {user: userCookie, video: video})
     });
@@ -69,17 +69,24 @@ router.post('/tube/video/edit/:vidId', function (req, res) {
 
 
 router.get('/tube/user/:id', function (req, res) {
-  var userCookie = req.session.user;
-  userCookie = userCookie.capitalize();
-  //refactor to not contain for loop...perhaps using $in
-  videos.find({}).then(function (videos) {
-    var userVideos = []
-    for (var i = 0; i < videos.length; i++) {
-      if (videos[i].userId == req.params.id) {
-        userVideos.push(videos[i])
-      }
+  users.findOne({_id: req.params.id}).then(function (user) {
+    if (!req.session.user || req.session.user != user.userName) {
+      res.render('404', {error: 'You do not have access to this page'})
     }
-    res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos})
+    else {
+      var userCookie = req.session.user;
+      userCookie = userCookie.capitalize();
+      //refactor to not contain for loop...perhaps using $in
+      videos.find({}).then(function (videos) {
+        var userVideos = []
+        for (var i = 0; i < videos.length; i++) {
+          if (videos[i].userId == req.params.id) {
+            userVideos.push(videos[i])
+          }
+        }
+        res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos})
+      });
+    }
   });
 });
 
