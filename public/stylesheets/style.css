@@ -11,6 +11,11 @@ a {
   display: none;
 }
 
+.user-comments {
+  border: solid rgba(0, 0, 0, 0.1) 1px;
+  width: 50%;
+}
+
 .embeded-video {
   display: inline-block;
   padding-left: 20px;

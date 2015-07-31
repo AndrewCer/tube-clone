@@ -33,6 +33,7 @@ router.get('/', function(req, res, next) {
 router.get('/tube', function (req, res) {
   var userCookie = req.session.user;
   videos.find({}).then(function (videos) {
+    users.findOne({_id: videos.userId})
     res.render('tube-show', {allVideos:videos, user: userCookie});
   });
 });

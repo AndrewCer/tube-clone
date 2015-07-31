@@ -4,15 +4,18 @@ block content
   h1= video.name
   iframe(src=video.url, height='490', width='580', title='YouTube Video Player')
   br
-  h4 Description:
+  h2 Description:
   p= video.description
   .comments
-    h2 Comments
+    h3 Comments
     textarea(name='comments', style='width: 400px; height: 100px;') Whats on Your Brain Noodle?
-    p Comment placeholder
-    p Comment placeholder
-    p Comment placeholder
-    p Comment placeholder
+    br
+    input(type='button', value='Post')
+    .user-comments
+      p Comment placeholder
+      p Comment placeholder
+      p Comment placeholder
+      p Comment placeholder
   
   a(href='/tube') To All Videos
   br
