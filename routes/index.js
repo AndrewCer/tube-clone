@@ -47,9 +47,14 @@ router.get('/tube/video/:vidId', function (req, res) {
 
 router.get('/tube/video/edit/:vidId', function (req, res) {
   var userCookie = req.session.user;
-  videos.findOne({_id: req.params.vidId}).then(function (video) {
-    res.render('video-edit', {user: userCookie, video: video})
-  });
+  if (!req.session.user || req.session.user != req.session.user) {
+    res.render('404', {error: 'You do not have access to this page'})
+  }
+  else {
+    videos.findOne({_id: req.params.vidId}).then(function (video) {
+      res.render('video-edit', {user: userCookie, video: video})
+    });
+  }
 });
 
 router.post('/tube/video/edit/:vidId', function (req, res) {
