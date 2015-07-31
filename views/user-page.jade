@@ -2,7 +2,12 @@ extends layout
 
 block content
   h1 Welcome #{user}
-  
+  h3 Your posted videos:
+  for video in userVideos
+    h4
+      a(href='/tube/video/' + video._id)= video.name
+      br
+      a(href='/tube/video/edit/' + video._id) Edit
   a(href='/tube') To All Videos
   br
   a(href='/tube/new-video/' + userId) Add Video

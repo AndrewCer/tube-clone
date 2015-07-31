@@ -37,18 +37,26 @@ router.get('/tube', function (req, res) {
   });
 });
 
-//show video with comments
-// router.get('/tube/:vidId', function (req, res) {
-//   res.render('tube/')
-// });
+//show video w/ comments
+router.get('/tube/video/:vidId', function (req, res) {
+  var userCookie = req.session.user;
+  videos.findOne({_id: req.params.vidId}).then(function (video) {
+    res.render('video', {user: userCookie, video: video})
+  });
+});
 
 router.get('/tube/user/:id', function (req, res) {
   var userCookie = req.session.user;
   userCookie = userCookie.capitalize();
-  // console.log(req.params.id);
-  videos.find({userId: {$in:req.params.id}}).then(function (videos) {
-    console.log(videos);
-    res.render('user-page', {user: userCookie, userId: req.params.id})
+  //refactor to not contain for loop...perhaps using $in
+  videos.find({}).then(function (videos) {
+    var userVideos = []
+    for (var i = 0; i < videos.length; i++) {
+      if (videos[i].userId == req.params.id) {
+        userVideos.push(videos[i])
+      }
+    }
+    res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos})
   });
 });
 
@@ -87,7 +95,7 @@ router.post('/tube/login', function (req, res) {
       }
       if (cryptCheck) {
         req.session.user = loginData.userName
-        return res.redirect('/tube/user/' + user._id);
+        res.redirect('/tube/user/' + user._id);
       }
       else {
         return res.render('index', {passowrdError: 'Incorrect password'})

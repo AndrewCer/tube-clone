@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= video.name
+  iframe(src=video.url, height='490', width='580', title='YouTube Video Player')
+  br
+  .comments
+    h2 Comments
+    textarea(name='comments', style='width: 400px; height: 100px;') Whats on Your Brain Noodle?
+    p Comment placeholder
+    p Comment placeholder
+    p Comment placeholder
+    p Comment placeholder
+  
+  a(href='/tube') To All Videos
