@@ -8,6 +8,7 @@ block content
       h4
         a(href='/tube/video/' + video._id)= video.name
         br
+        iframe(src=video.url, height='190', width='280', title='YouTube Video Player')
         a(href='/tube/video/edit/' + video._id) Edit
     a(href='/tube') To All Videos
     br
