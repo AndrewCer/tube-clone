@@ -20,5 +20,7 @@ html
           input#password(type='password', name='password')
         input(type='submit', value='Login')
       a(href='/tube/sign-up') Sign Up
+      if !user
+        a(href='/tube/sign-up') Post Video
       br
     block content

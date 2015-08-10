@@ -42,7 +42,9 @@ router.get('/tube', function (req, res) {
 router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
   videos.findOne({_id: req.params.vidId}).then(function (video) {
-    res.render('video', {user: userCookie, video: video})
+    users.findOne({_id: video.userId}).then(function (user) {
+      return res.render('video', {user: userCookie, video: video, userInfo: user})
+    });
   });
 });
 

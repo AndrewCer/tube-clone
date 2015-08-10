@@ -1,22 +1,24 @@
 extends layout
 
 block content
-  h1= video.name
   iframe(src=video.url, height='490', width='580', title='YouTube Video Player')
   br
-  h2 Description:
-  p= video.description
-  .comments
-    h3 Comments
-    textarea(name='comments', style='width: 400px; height: 100px;') Whats on Your Brain Noodle?
-    br
-    input(type='button', value='Post')
-    .user-comments
-      p Comment placeholder
-      p Comment placeholder
-      p Comment placeholder
-      p Comment placeholder
-  
+  #video-header
+    h1= video.name
+    p Added By: #{userInfo.userName}
+  #description-section
+    h2 Description:
+    p= video.description
+  #user-comments
+    #comments
+      if user
+        h3 Comments
+        textarea#comment-input(name='comments') What's on Your Brain Noodle?
+        br
+        input#comment-submit(type='button', value='Post')
   a(href='/tube') To All Videos
   br
   a(href='/') Home
+  p#posted-by(style='display: none')= user
+  
+  script(src='/javascripts/client.js')

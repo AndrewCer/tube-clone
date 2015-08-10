@@ -11,9 +11,31 @@ a {
   display: none;
 }
 
-.user-comments {
-  border: solid rgba(0, 0, 0, 0.1) 1px;
+#user-comments {
+  border: solid black 1px;
   width: 50%;
+}
+
+#comment-input {
+  border: solid rgba(0, 0, 0, 0.1) 1px;
+  resize: none;
+  width: 400px;
+  height: 35px;
+}
+
+#comment-input:hover {
+  cursor: pointer;
+}
+
+#comment-cursor {
+  border: solid rgba(0, 0, 0, 0.1) 1px;
+  resize: none;
+  width: 400px;
+  height: 70px;
+}
+
+#comment-submit {
+  display: none;
 }
 
 .embeded-video {
