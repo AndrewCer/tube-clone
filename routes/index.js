@@ -33,8 +33,7 @@ router.get('/', function(req, res, next) {
 router.get('/tube', function (req, res) {
   var userCookie = req.session.user;
   videos.find({}).then(function (videos) {
-    users.findOne({_id: videos.userId})
-    res.render('tube-show', {allVideos:videos, user: userCookie});
+      res.render('tube-show', {allVideos: videos, user: userCookie});
   });
 });
 
@@ -162,6 +161,10 @@ router.post('/tube/new-video/:id', function (req, res) {
   })
 });
 
+router.post('/tube/vid-comment', function (req, res) {
+  var commentData = JSON.parse(req.body.userComment);
+  comments.insert(commentData);
+});
 
 
 module.exports = router;

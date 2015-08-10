@@ -21,6 +21,7 @@ a {
   resize: none;
   width: 400px;
   height: 35px;
+  outline: none;
 }
 
 #comment-input:hover {
@@ -31,6 +32,7 @@ a {
   border: solid rgba(0, 0, 0, 0.1) 1px;
   resize: none;
   width: 400px;
+  outline: none;
 }
 
 #comment-submit {
