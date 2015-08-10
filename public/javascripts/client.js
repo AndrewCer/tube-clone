@@ -6,11 +6,13 @@ var poster = document.getElementById('posted-by');
 commentBox.addEventListener('click', function () {
   commentBox.innerHTML = '';
   commentBox.placeholder = 'Feed Me Your Comment';
-  commentBox.id = 'comment-cursor';
+  commentBox.className = 'comment-cursor';
+  commentBox.style.height = '70px'
   commentSubmit.style.display = 'inline-block';
   commentBoxSubmit = document.getElementById('comment-cursor');
   commentBox.addEventListener('focusout', function () {
-    commentBox.id = 'comment-input';
+    commentBox.className = '';
+    commentBox.style.height = '35px'
     commentBox.innerHTML = "What's on Your Brain Noodle?"
     commentSubmit.style.display = 'none';
   });
