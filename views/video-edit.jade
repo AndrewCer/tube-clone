@@ -15,6 +15,6 @@ block content
     input.hide-me(type='text', value=video.userId, name='userId')
     input(type='submit', value='Update!')
   br
-  a(href='/tube/delete') Delete
+  a(href='/tube/delete/' + video._id) Delete
   br
   a(href='/tube') To All Videos

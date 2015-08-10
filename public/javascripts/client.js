@@ -1,6 +1,6 @@
 var commentBox = document.getElementById('comment-input');
 var commentSubmit = document.getElementById('comment-submit');
-var commentsDiv = document.getElementById('user-comments');
+var commentsDiv = document.getElementById('new-comments');
 var poster = document.getElementById('posted-by').innerHTML;
 var vidId = document.getElementById('video-id').innerHTML;
 
@@ -28,7 +28,7 @@ commentSubmit.addEventListener('click', function () {
   var postedBy = document.createElement('p');
   commentDiv.className = 'single-comment';
   comment.innerHTML = commentBox.value;
-  postedBy.innerHTML = poster + ' says:';
+  postedBy.innerHTML = poster + ' said:';
   commentsDiv.appendChild(commentDiv);
   commentDiv.appendChild(postedBy);
   commentDiv.appendChild(comment);

@@ -33,7 +33,8 @@ router.get('/', function(req, res, next) {
 router.get('/tube', function (req, res) {
   var userCookie = req.session.user;
   videos.find({}).then(function (videos) {
-      res.render('tube-show', {allVideos: videos, user: userCookie});
+    videos.reverse();
+    res.render('tube-show', {allVideos: videos, user: userCookie});
   });
 });
 
@@ -41,8 +42,13 @@ router.get('/tube', function (req, res) {
 router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
   videos.findOne({_id: req.params.vidId}).then(function (video) {
+    var viewCount = Number(video.views) + 1;
     users.findOne({_id: video.userId}).then(function (user) {
-      return res.render('video', {user: userCookie, video: video, userInfo: user})
+      comments.find({videoId: req.params.vidId}).then(function (comments) {
+        comments.reverse();
+        videos.update({_id: req.params.vidId}, {$set: {views: viewCount}});
+        return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments})
+      });
     });
   });
 });
@@ -68,8 +74,6 @@ router.post('/tube/video/edit/:vidId', function (req, res) {
   });
 });
 
-
-
 router.get('/tube/user/:id', function (req, res) {
   users.findOne({_id: req.params.id}).then(function (user) {
     if (!req.session.user || req.session.user != user.userName) {
@@ -86,6 +90,7 @@ router.get('/tube/user/:id', function (req, res) {
             userVideos.push(videos[i])
           }
         }
+        userVideos.reverse();
         res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos})
       });
     }
@@ -121,10 +126,10 @@ router.post('/tube/login', function (req, res) {
   var loginData = req.body
   users.findOne({userName: loginData.userName.toLowerCase()})
     .then(function (user) {
-      var cryptCheck = bcrypt.compareSync(loginData.password, user.password)
       if (user === null) {
         return res.render('index', {nameError: 'Incorrect Username'})
       }
+      var cryptCheck = bcrypt.compareSync(loginData.password, user.password)
       if (cryptCheck) {
         req.session.user = loginData.userName
         res.redirect('/tube/user/' + user._id);
@@ -164,6 +169,12 @@ router.post('/tube/new-video/:id', function (req, res) {
 router.post('/tube/vid-comment', function (req, res) {
   var commentData = JSON.parse(req.body.userComment);
   comments.insert(commentData);
+});
+
+router.get('/tube/delete/:id', function (req, res) {
+  videos.remove({_id: req.params.id}).then(function () {
+    res.redirect('/tube');
+  });
 });
 
 

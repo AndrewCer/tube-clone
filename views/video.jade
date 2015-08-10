@@ -6,6 +6,7 @@ block content
   #video-header
     h1= video.name
     p Added By: #{userInfo.userName}
+    p Views: #{video.views}
   #description-section
     h2 Description:
     p= video.description
@@ -16,6 +17,12 @@ block content
         textarea#comment-input(name='comments') What's on Your Brain Noodle?
         br
         input#comment-submit(type='button', value='Post')
+    #new-comments
+    if comments
+      for com in comments
+        .single-comment
+          p #{com.user} said:
+          p= com.comment
   a(href='/tube') To All Videos
   br
   p#posted-by(style='display: none')= user
