@@ -42,6 +42,7 @@ router.get('/tube', function (req, res) {
 router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
   videos.findOne({_id: req.params.vidId}).then(function (video) {
+    console.log(video.likes.length);
     var viewCount = Number(video.views) + 1;
     users.findOne({_id: video.userId}).then(function (user) {
       comments.find({videoId: req.params.vidId}).then(function (comments) {

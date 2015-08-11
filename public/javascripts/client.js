@@ -3,6 +3,12 @@ var commentSubmit = document.getElementById('comment-submit');
 var commentsDiv = document.getElementById('new-comments');
 var poster = document.getElementById('posted-by').innerHTML;
 var vidId = document.getElementById('video-id').innerHTML;
+var likeButton = document.getElementById('like-button');
+var dislikeButton = document.getElementById('dislike-button');
+
+likeButton.addEventListener('click', function () {
+  alert('liked!')
+});
 
 commentBox.addEventListener('click', function () {
   commentBox.innerHTML = '';

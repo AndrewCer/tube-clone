@@ -7,6 +7,16 @@ a {
   color: #00B7FF;
 }
 
+#like-button {
+  color: white;
+  background-color: green;
+}
+
+#dislike-button {
+  color: white;
+  background-color: red;
+}
+
 .hide-me {
   display: none;
 }

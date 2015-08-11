@@ -6,7 +6,14 @@ block content
   #video-header
     h1= video.name
     p Added By: #{userInfo.userName}
-    p Views: #{video.views}
+    if video.views
+      p Views: #{video.views}
+    input#like-button(type='button', value= 'Like It!')
+    if video.like
+      p= video.like
+    input#dislike-button(type='button', value='Dislike It ')
+    if video.dislike
+      p= video.dislike
   #description-section
     h2 Description:
     p= video.description
