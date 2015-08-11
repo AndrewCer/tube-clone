@@ -85,6 +85,7 @@ router.get('/tube/video/:vidId', function (req, res) {
                   }
                 }
               }
+              userCookie = userCookie.capitalize();
               if (dislikeAccum === true) {
                 return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id})
               }

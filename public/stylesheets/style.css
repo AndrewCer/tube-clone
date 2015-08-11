@@ -30,7 +30,7 @@ a {
 }
 
 .main > .container {
-  /*background-color: white;*/
+  background-color: white;
 }
 
 .nav-section {
@@ -68,6 +68,12 @@ a {
   height: 200px;
   background-color: white;
   margin: 10% auto;
+  border-radius: 20px;
+}
+
+.login {
+  border-radius: 20px;
+  padding: 20px;
 }
 
 .login-box label, .login-box input {
@@ -143,5 +149,8 @@ a {
 }
 
 .embeded-video {
-  display: inline-block;
+  height: 196px;
+  width: 200px;
+  display: inline-table;
+  margin-right: 20px;
 }

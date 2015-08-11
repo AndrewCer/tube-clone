@@ -6,22 +6,23 @@ html
   body
     #sign-in-overlay
       .login-box
-        if user
-          br
-          form(action='/tube/logout', method='POST')
-            input(type='submit', value='Logout')
-        else
-          form(action='/tube/login', method='POST')
-            if nameError
-              p= nameError
-            label(for='user-name') User Name:
-              input#user-name(type='text', name='userName')
-            if passwordError
-              p= passwordError
-            label(for='password') Password:
-              input#password(type='password', name='password')
-            input(type='submit', value='Login')
-            input#cancel-button(type='button', value='Cancel')
+        .login
+          if user
+            br
+            form(action='/tube/logout', method='POST')
+              input(type='submit', value='Logout')
+          else
+            form(action='/tube/login', method='POST')
+              if nameError
+                p= nameError
+              label(for='user-name') User Name:
+                input#user-name(type='text', name='userName')
+              if passwordError
+                p= passwordError
+              label(for='password') Password:
+                input#password(type='password', name='password')
+              input(type='submit', value='Login')
+              input#cancel-button(type='button', value='Cancel')
     .nav-section
       .container
         div.user-header
