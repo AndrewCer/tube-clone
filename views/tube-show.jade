@@ -1,9 +1,11 @@
 extends layout
 
 block content
-  h1 All Videos
-  for vid in allVideos
-    .embeded-video
-      h2
-        a(href='/tube/video/' + vid._id)= vid.name
-      iframe(src=vid.url, height='390', width='480', title='YouTube Video Player')
+  .main
+    .container
+      h1 All Videos
+      for vid in allVideos
+        .embeded-video
+          h2
+            a(href='/tube/video/' + vid._id)= vid.name
+          iframe(src=vid.url, height='390', width='480', title='YouTube Video Player')

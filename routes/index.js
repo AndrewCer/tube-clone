@@ -30,11 +30,23 @@ router.get('/', function(req, res, next) {
   }
 });
 
+router.get('/style', function (req, res) {
+  res.render('style');
+});
+
 router.get('/tube', function (req, res) {
   var userCookie = req.session.user;
   videos.find({}).then(function (videos) {
     videos.reverse();
-    res.render('tube-show', {allVideos: videos, user: userCookie});
+    if (userCookie) {
+      users.findOne({userName: userCookie}).then(function (user) {
+        userCookie = userCookie.capitalize();
+        res.render('tube-show', {allVideos: videos, user: userCookie, userId: user._id});
+      });
+    }
+    else {
+      res.render('tube-show', {allVideos: videos, user: userCookie});
+    }
   });
 });
 
@@ -42,13 +54,49 @@ router.get('/tube', function (req, res) {
 router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
   videos.findOne({_id: req.params.vidId}).then(function (video) {
-    console.log(video.likes.length);
     var viewCount = Number(video.views) + 1;
     users.findOne({_id: video.userId}).then(function (user) {
       comments.find({videoId: req.params.vidId}).then(function (comments) {
         comments.reverse();
-        videos.update({_id: req.params.vidId}, {$set: {views: viewCount}});
-        return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments})
+        videos.update({_id: req.params.vidId}, {$set: {views: viewCount}})
+        .then(function () {
+          if (!userCookie) {
+            return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments})
+          }
+          else {
+            users.findOne({userName: userCookie})
+            .then(function (loggedUser) {
+              var likeAccum = null;
+              var dislikeAccum = null;
+              if (loggedUser) {
+
+                if (loggedUser.like) {
+                  for (var i = 0; i < loggedUser.like.length; i++) {
+                    if (loggedUser.like[i] == video._id) {
+                      likeAccum = true;
+                    }
+                  }
+                }
+                if (loggedUser.dislike) {
+                  for (var i = 0; i < loggedUser.dislike.length; i++) {
+                    if (loggedUser.dislike[i] == video._id) {
+                      dislikeAccum = true;
+                    }
+                  }
+                }
+              }
+              if (dislikeAccum === true) {
+                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id})
+              }
+              if (likeAccum === true) {
+                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, liked: true, userId: loggedUser._id})
+              }
+              if (likeAccum === null && dislikeAccum === null) {
+                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userId: loggedUser._id})
+              }
+            });
+          }
+        });
       });
     });
   });
@@ -141,7 +189,7 @@ router.post('/tube/login', function (req, res) {
     });
 });
 
-router.post('/tube/logout', function (req, res) {
+router.get('/tube/logout', function (req, res) {
   req.session = null
   res.redirect('/');
 });
@@ -178,5 +226,18 @@ router.get('/tube/delete/:id', function (req, res) {
   });
 });
 
+router.get('/tube/like/:vidId/:user', function (req, res) {
+  videos.update({_id: req.params.vidId}, { $addToSet: { like: { $each: [ req.params.user] } } })
+  .then(function () {
+    return users.update({userName: req.params.user}, { $addToSet: { like: { $each: [ req.params.vidId] } } })
+  });
+});
+
+router.get('/tube/dislike/:vidId/:user', function (req, res) {
+  videos.update({_id: req.params.vidId}, { $addToSet: { dislike: { $each: [ req.params.user] } } })
+  .then(function () {
+    return users.update({userName: req.params.user}, { $addToSet: { dislike: { $each: [ req.params.vidId] } } })
+  });
+});
 
 module.exports = router;

@@ -8,12 +8,38 @@ block content
     p Added By: #{userInfo.userName}
     if video.views
       p Views: #{video.views}
-    input#like-button(type='button', value= 'Like It!')
+    if user
+      if disliked
+      else
+        if liked
+          input#liked-button(type='button', value= 'You Liked This!')
+        else
+          input#like-button(type='button', value= 'Like It!')
+          input#liked-button(style='display: none;', type='button', value= 'You Liked This!')
     if video.like
-      p= video.like
-    input#dislike-button(type='button', value='Dislike It ')
+      div
+        p(style='display: inline-block') Likes:
+        p#like-count #{video.like.length}
+    else
+      div
+        p(style='display: inline-block') Likes: 
+        p#like-count 0
+    if user
+      if liked
+      else
+        if disliked
+          input#disliked-button(type='button', value= 'You Disliked This!')
+        else
+          input#dislike-button(type='button', value='Dislike It')
+          input#disliked-button(style='display: none;', type='button', value= 'You Disliked This!')
     if video.dislike
-      p= video.dislike
+      div
+        p(style='display: inline-block') Dislikes:
+        p#dislike-count #{video.dislike.length}
+    else
+      div
+        p(style='display: inline-block') Dislikes:
+        p#dislike-count 0
   #description-section
     h2 Description:
     p= video.description

@@ -1,43 +1,39 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    h1 Sign Up
-    if errors
-      ul
-        each err in errors
-          li(style='color: red; list-style-type: none')= err
-    form(action='/tube/sign-up', method='POST')
-      if formData
-        div.row
-          label(for='user-name') User Name:
-            input#user-name(type='text', name='userName', value= formData.userName, autofocus)
-        div.row
-          label(for='age') Age:
-            input#age(type='number', name='age', value= formData.age)
-        div.row
-          label(for='password') Password:
-            input#password(type='password', name='password')
-        div.row
-          label(for='pass-check') Confirm Password:
-            input#pass-check(type='password', name='passwordCheck')
-        input(type='submit', value='Sign Up')
-      else
-        div.row
-          label(for='user-name') User Name:
-            input#user-name(type='text', name='userName', autofocus)
-        div.row
-          label(for='age') Age:
-            input#age(type='number', name='age')
-        div.row
-          label(for='password') Password:
-            input#password(type='password', name='password')
-        div.row
-          label(for='pass-check') Confirm Password:
-            input#pass-check(type='password', name='passwordCheck')
-        input(type='submit', value='Sign Up')
-    a(href='/') Home
-    br
-    a(href='/tube') To All Videos
+extends layout
+
+block content
+    .main
+      .container
+        h1 Sign Up
+        if errors
+          ul
+            each err in errors
+              li(style='color: red; list-style-type: none')= err
+        form(action='/tube/sign-up', method='POST')
+          if formData
+            div.row
+              label(for='user-name') User Name:
+                input#user-name(type='text', name='userName', value= formData.userName, autofocus)
+            div.row
+              label(for='age') Age:
+                input#age(type='number', name='age', value= formData.age)
+            div.row
+              label(for='password') Password:
+                input#password(type='password', name='password')
+            div.row
+              label(for='pass-check') Confirm Password:
+                input#pass-check(type='password', name='passwordCheck')
+            input(type='submit', value='Sign Up')
+          else
+            div.row
+              label(for='user-name') User Name:
+                input#user-name(type='text', name='userName', autofocus)
+            div.row
+              label(for='age') Age:
+                input#age(type='number', name='age')
+            div.row
+              label(for='password') Password:
+                input#password(type='password', name='password')
+            div.row
+              label(for='pass-check') Confirm Password:
+                input#pass-check(type='password', name='passwordCheck')
+            input(type='submit', value='Sign Up')
