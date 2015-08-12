@@ -10,7 +10,8 @@ block content
           h4
             a(href='/tube/video/' + video._id)= video.name
             br
-            iframe(src=video.url, height='190', width='280', title='YouTube Video Player')
+            a(href='/tube/video/' + video._id)
+              img(src='http://img.youtube.com/vi/' + video.url + '/0.jpg', style='height: 190x; width:280px')
             a(href='/tube/video/edit/' + video._id) Edit
       else
         h3 You don't have any posted videos

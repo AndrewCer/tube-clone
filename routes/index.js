@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var validator = require("../lib/validation.js").validation;
-// var database = require('../lib/database.js').dbCalls;
-// var dbInsert = require('../lib/database.js').dbInsert;
 var db = require('monk')(process.env.MONGO_URI);
 var users = db.get('users');
 var videos = db.get('videos');
@@ -64,12 +62,12 @@ router.get('/tube/video/:vidId', function (req, res) {
             return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments})
           }
           else {
-            users.findOne({userName: userCookie})
+            users.findOne({userName: userCookie.toLowerCase()})
             .then(function (loggedUser) {
               var likeAccum = null;
               var dislikeAccum = null;
               if (loggedUser) {
-
+                console.log(loggedUser);
                 if (loggedUser.like) {
                   for (var i = 0; i < loggedUser.like.length; i++) {
                     if (loggedUser.like[i] == video._id) {
@@ -210,6 +208,9 @@ router.post('/tube/new-video/:id', function (req, res) {
   var formData = req.body
   users.findOne({_id: req.params.id}).then(function (user) {
     formData.userId = user._id;
+    var urlId = formData.url;
+    urlId = urlId.split('=')[1];
+    formData.url = urlId;
     videos.insert(formData).then(function (videos) {
       res.redirect('/tube')
     });
@@ -228,16 +229,16 @@ router.get('/tube/delete/:id', function (req, res) {
 });
 
 router.get('/tube/like/:vidId/:user', function (req, res) {
-  videos.update({_id: req.params.vidId}, { $addToSet: { like: { $each: [ req.params.user] } } })
+  videos.update({_id: req.params.vidId}, { $addToSet: { like: { $each: [ req.params.user.toLowerCase()] } } })
   .then(function () {
-    return users.update({userName: req.params.user}, { $addToSet: { like: { $each: [ req.params.vidId] } } })
+    return users.update({userName: req.params.user.toLowerCase()}, { $addToSet: { like: { $each: [ req.params.vidId] } } })
   });
 });
 
 router.get('/tube/dislike/:vidId/:user', function (req, res) {
-  videos.update({_id: req.params.vidId}, { $addToSet: { dislike: { $each: [ req.params.user] } } })
+  videos.update({_id: req.params.vidId}, { $addToSet: { dislike: { $each: [ req.params.user.toLowerCase()] } } })
   .then(function () {
-    return users.update({userName: req.params.user}, { $addToSet: { dislike: { $each: [ req.params.vidId] } } })
+    return users.update({userName: req.params.user.toLowerCase()}, { $addToSet: { dislike: { $each: [ req.params.vidId] } } })
   });
 });
 

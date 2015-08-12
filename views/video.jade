@@ -1,64 +1,64 @@
 extends layout
 
 block content
-  iframe(src=video.url, height='490', width='580', title='YouTube Video Player')
-  br
-  #video-header
-    h1= video.name
-    p Added By: #{userInfo.userName}
-    if video.views
-      p Views: #{video.views}
-    if user
-      if disliked
-      else
-        if liked
-          input#liked-button(type='button', value= 'You Liked This!')
+  .main
+    .container
+      iframe(src='https://www.youtube.com/embed/' + video.url, height='490', width='580', title='YouTube Video Player')
+      br
+      #video-header
+        h1= video.name
+        p Added By: #{userInfo.userName}
+        if video.views
+          p Views: #{video.views}
+        if user
+          if disliked
+          else
+            if liked
+              input#liked-button(type='button', value= 'You Liked This!')
+            else
+              input#like-button(type='button', value= 'Like It!')
+              input#liked-button(style='display: none;', type='button', value= 'You Liked This!')
+        if video.like
+          div
+            p(style='display: inline-block') Likes:
+            p#like-count #{video.like.length}
         else
-          input#like-button(type='button', value= 'Like It!')
-          input#liked-button(style='display: none;', type='button', value= 'You Liked This!')
-    if video.like
-      div
-        p(style='display: inline-block') Likes:
-        p#like-count #{video.like.length}
-    else
-      div
-        p(style='display: inline-block') Likes: 
-        p#like-count 0
-    if user
-      if liked
-      else
-        if disliked
-          input#disliked-button(type='button', value= 'You Disliked This!')
+          div
+            p(style='display: inline-block') Likes: 
+            p#like-count 0
+        if user
+          if liked
+          else
+            if disliked
+              input#disliked-button(type='button', value= 'You Disliked This!')
+            else
+              input#dislike-button(type='button', value='Dislike It')
+              input#disliked-button(style='display: none;', type='button', value= 'You Disliked This!')
+        if video.dislike
+          div
+            p(style='display: inline-block') Dislikes:
+            p#dislike-count #{video.dislike.length}
         else
-          input#dislike-button(type='button', value='Dislike It')
-          input#disliked-button(style='display: none;', type='button', value= 'You Disliked This!')
-    if video.dislike
-      div
-        p(style='display: inline-block') Dislikes:
-        p#dislike-count #{video.dislike.length}
-    else
-      div
-        p(style='display: inline-block') Dislikes:
-        p#dislike-count 0
-  #description-section
-    h2 Description:
-    p= video.description
-  #user-comments
-    #comments
-      if user
-        h3 Comments
-        textarea#comment-input(name='comments') What's on Your Brain Noodle?
-        br
-        input#comment-submit(type='button', value='Post')
-    #new-comments
-    if comments
-      for com in comments
-        .single-comment
-          p #{com.user} said:
-          p= com.comment
-  a(href='/tube') To All Videos
-  br
-  p#posted-by(style='display: none')= user
-  p#video-id(style='display: none')= video._id
+          div
+            p(style='display: inline-block') Dislikes:
+            p#dislike-count 0
+      #description-section
+        h2 Description:
+        p= video.description
+      #user-comments
+        #comments
+          if user
+            h3 Comments
+            textarea#comment-input(name='comments') What's on Your Brain Noodle?
+            br
+            input#comment-submit(type='button', value='Post')
+        #new-comments
+        if comments
+          for com in comments
+            .single-comment
+              p #{com.user} said:
+              p= com.comment
+      p#posted-by(style='display: none')= user
+      p#video-id(style='display: none')= video._id
   
   script(src='/javascripts/client.js')

@@ -7,8 +7,8 @@ block content
       form(action='/tube/new-video/' + userId, method='POST')
         label(for='name') Name:
           input#name(type='text', name='name', autofocus)
-        label(for='url') Url (please use embeded URL)
-          input#url(type='text', name='url')
+        label(for='url') YouTube Url:
+          input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM')
         label(for='description') Description
           textarea#description(name='description')
         input(style='display: none', type='text', name='views', value=0)
