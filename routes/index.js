@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
   if (req.session.user) {
     users.findOne({userName: userCookie}).then(function (user) {
       userCookie = userCookie.capitalize();
-      return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id});
+      return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id, userImg: user.profileImg});
     });
 
   }
@@ -39,7 +39,7 @@ router.get('/tube', function (req, res) {
     if (userCookie) {
       users.findOne({userName: userCookie}).then(function (user) {
         userCookie = userCookie.capitalize();
-        res.render('tube-show', {allVideos: videos, user: userCookie, userId: user._id});
+        res.render('tube-show', {allVideos: videos, user: userCookie, userId: user._id, userImg: user.profileImg});
       });
     }
     else {
@@ -59,7 +59,7 @@ router.get('/tube/video/:vidId', function (req, res) {
         videos.update({_id: req.params.vidId}, {$set: {views: viewCount}})
         .then(function () {
           if (!userCookie) {
-            return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments})
+            return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userImg: user.profileImg})
           }
           else {
             users.findOne({userName: userCookie.toLowerCase()})
@@ -85,13 +85,13 @@ router.get('/tube/video/:vidId', function (req, res) {
               }
               userCookie = userCookie.capitalize();
               if (dislikeAccum === true) {
-                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id})
+                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id, userImg: user.profileImg})
               }
               if (likeAccum === true) {
-                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, liked: true, userId: loggedUser._id})
+                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, liked: true, userId: loggedUser._id, userImg: user.profileImg})
               }
               if (likeAccum === null && dislikeAccum === null) {
-                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userId: loggedUser._id})
+                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userId: loggedUser._id, userImg: user.profileImg})
               }
             });
           }
@@ -139,7 +139,7 @@ router.get('/tube/user/:id', function (req, res) {
           }
         }
         userVideos.reverse();
-        res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos})
+        res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos, userImg: user.profileImg})
       });
     }
   });
@@ -240,6 +240,11 @@ router.get('/tube/dislike/:vidId/:user', function (req, res) {
   .then(function () {
     return users.update({userName: req.params.user.toLowerCase()}, { $addToSet: { dislike: { $each: [ req.params.vidId] } } })
   });
+});
+
+router.post('/tube/update-pic/:userId', function (req, res) {
+  users.update({_id: req.params.userId}, {$set: {profileImg: req.body.url}})
+  res.json('thanks!')
 });
 
 module.exports = router;

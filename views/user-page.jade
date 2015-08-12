@@ -1,17 +1,28 @@
 extends layout
 
 block content
+  p#user-id(style='display: none')= userId
+  #user-image-overlay
+    #image-form
+      label Image Preview:
+      img#image-preview(src='/images/futurama-clone.jpg')
+      label(for='image-url') New Image Url:
+      input#image-url(type='text')
+      input(type='button', value='Preview')
+      input#update-image(type='button', value='Save')
   .main
     .container
       h1 Welcome #{user}
+      a#edit-pic(href='#') Edit Profile Picture
       if userVideos.length > 0
         h3 Your posted videos:
         for video in userVideos
-          h4
+          h4.uploaded-videos
             a(href='/tube/video/' + video._id)= video.name
             br
             a(href='/tube/video/' + video._id)
               img(src='http://img.youtube.com/vi/' + video.url + '/0.jpg', style='height: 190x; width:280px')
+            br
             a(href='/tube/video/edit/' + video._id) Edit
       else
         h3 You don't have any posted videos
@@ -19,3 +30,4 @@ block content
           a(href='/tube/new-video/' + userId) Add A Video
         h3 Or Start Commenting On: 
           a(href='/tube') All Videos
+  script(src='/javascripts/profile.js')

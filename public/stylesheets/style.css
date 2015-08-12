@@ -9,12 +9,17 @@ body {
   /*background-color: brown;*/
 }
 
+#image-preview, #profile-image {
+  height: 50px;
+  width: 50px;
+}
+
 a {
   color: #00B7FF;
   text-decoration: none;
 }
 
-#sign-in-overlay {
+#sign-in-overlay, #user-image-overlay {
   height: 1000px;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);;
@@ -146,6 +151,31 @@ a {
 
 #comment-submit {
   display: none;
+}
+
+.uploaded-videos {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.picture-box {
+  height: 100px;
+  width: 100px;
+  background-color: white;
+}
+
+#image-form {
+  background-color: white;
+  display: inline-block;
+  width: 200px;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 10% 40%;
+}
+
+#image-form label, #image-form input {
+  margin-top: 10px;
+  display: block;
 }
 
 .embeded-video {
