@@ -15,16 +15,25 @@ String.prototype.capitalize = function(){
 };
 
 router.get('/', function(req, res, next) {
-  var userCookie = req.session.user;
-  if (req.session.user) {
-    users.findOne({userName: userCookie}).then(function (user) {
-      userCookie = userCookie.capitalize();
-      return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id, userImg: user.profileImg});
-    });
-  }
-  else {
-    res.render('index', { title: 'Tube Clone'});
-  }
+  var sortedVideos = null;
+  var topFive = [];
+  videos.find().then(function (vids) {
+    sortedVideos = vids.sort(function(a, b){return b.views-a.views});
+    for (var i = 0; i < 4; i++) {
+      topFive.push(sortedVideos[i]);
+    }
+  }).then(function () {
+    var userCookie = req.session.user;
+    if (req.session.user) {
+      users.findOne({userName: userCookie}).then(function (user) {
+        userCookie = userCookie.capitalize();
+        return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id, userImg: user.profileImg, topVideos: topFive});
+      });
+    }
+    else {
+      res.render('index', { title: 'Tube Clone', topVideos: topFive});
+    }
+  });
 });
 
 router.get('/style', function (req, res) {

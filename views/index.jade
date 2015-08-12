@@ -8,5 +8,12 @@ block content
         h1 Hi #{user}! Welcome to Tube Clone
       else
         h1 Welcome to Tube Clone
+      h3 Top 4 Videos (by view count)
+      for video in topVideos
+        .embeded-video
+          a(href='/tube/video/' + video._id)
+              img(src='http://img.youtube.com/vi/' + video.url + '/0.jpg', style='height: 110px; width:196px')
+          p
+            a(href='/tube/video/' + video._id)= video.name
   .footer
     .container

@@ -16,7 +16,7 @@ html
               if nameError
                 p= nameError
               label(for='user-name') User Name:
-                input#user-name(type='text', name='userName')
+                input#user-name(type='text', name='userName', autofocus)
               if passwordError
                 p= passwordError
               label(for='password') Password:
@@ -25,18 +25,15 @@ html
               input#cancel-button(type='button', value='Cancel')
     .nav-section
       .container
-        div.user-header
-          if user
-            if userImg
-              a(href='/tube/user/' + userId)
-                img#profile-image(src=userImg)
-            else
-              a(href='/tube/user/' + userId)
-                img#profile-image(src='/images/futurama-clone.jpg')
-          div.user-info
-            if user
-              a#dasboard-link(href='/tube/user/' + userId) #{user}'s Dashboard
-              a(href='/tube/logout') Log Out
+        if user
+          //- a#dasboard-link(href='/tube/user/' + userId) #{user}'s Dashboard
+          a#logout(href='/tube/logout') Log Out
+          if userImg
+            a(href='/tube/user/' + userId)
+              img#profile-image(src=userImg)
+          else
+            a(href='/tube/user/' + userId)
+              img#profile-image(src='/images/futurama-clone.jpg')
         ul
           li
             a(href='/') Home
