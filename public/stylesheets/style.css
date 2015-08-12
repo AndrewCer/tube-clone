@@ -82,9 +82,13 @@ textarea {
   margin-bottom: 10px;
 }
 
-#user-name, #password {
+#user-name, #password, #pass-check, #age {
   margin-top: 8px;
   font-size: 12px;
+}
+
+#pass-check {
+  margin-bottom: 1em;
 }
 
 #image-url {

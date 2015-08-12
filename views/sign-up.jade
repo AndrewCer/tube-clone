@@ -12,30 +12,30 @@ block content
           if formData
             div.row
               label(for='user-name') User Name:
-                input#user-name(type='text', name='userName', value= formData.userName, autofocus)
+              input#user-name(type='text', name='userName', value= formData.userName, autofocus)
             div.row
               label(for='age') Age:
-                input#age(type='number', name='age', value= formData.age)
+              input#age(type='number', name='age', value= formData.age)
             div.row
               label(for='password') Password:
-                input#password(type='password', name='password')
+              input#password(type='password', name='password')
             div.row
               label(for='pass-check') Confirm Password:
-                input#pass-check(type='password', name='passwordCheck')
+              input#pass-check(type='password', name='passwordCheck')
             input(type='submit', value='Sign Up')
           else
             div.row
               label(for='user-name') User Name:
-                input#user-name(type='text', name='userName', autofocus)
+              input#user-name(type='text', name='userName', autofocus)
             div.row
               label(for='age') Age:
-                input#age(type='number', name='age')
+              input#age(type='number', name='age')
             div.row
               label(for='password') Password:
-                input#password(type='password', name='password')
+              input#password(type='password', name='password')
             div.row
               label(for='pass-check') Confirm Password:
-                input#pass-check(type='password', name='passwordCheck')
-            input(type='submit', value='Sign Up')
+              input#pass-check(type='password', name='passwordCheck')
+            input#button(type='submit', value='Sign Up')
     .footer
       .container
