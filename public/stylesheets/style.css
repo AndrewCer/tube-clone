@@ -10,10 +10,11 @@ body {
   padding-top: 70px;
 }
 
-#image-preview, #profile-image {
+#profile-image {
   height: 50px;
   width: 50px;
   float: right;
+
 }
 
 #logout {
@@ -27,12 +28,97 @@ a {
   text-decoration: none;
 }
 
+label {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+input {
+  border: none;
+  box-shadow: inset 0 1px 3px #ddd;
+  padding-left: 10px;
+  width: 13em;
+  height: 3em;
+  border-radius: 5px;
+  outline: 0;
+}
+
+textarea {
+  border: none;
+  box-shadow: inset 0 1px 3px #ddd;
+  padding-left: 10px;
+  width: 45em;
+  height: 15em;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding-top: 8px;
+  outline: 0;
+  margin-bottom: 1em;
+}
+
+#url {
+  width: 300px;
+}
+
+#button, #comment-submit {
+  border: solid #1f5c99 2px;
+  background-color: #1f5c99;
+  /*font-weight: bolder;*/
+  box-shadow: inset 0 1px 3px #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  color: white;
+}
+
+#cancel-button, #update-image, #preview-button, #login-button {
+  border: solid #1f5c99 2px;
+  background-color: #1f5c99;
+  font-size: 12px;
+  color: white;
+}
+
+#login-button {
+  margin-bottom: 10px;
+}
+
+#user-name, #password {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+#image-url {
+  font-size: 12px;
+}
+
+#button:hover, #comment-submit:hover, #cancel-button:hover, #update-image:hover, #preview-button:hover, #login-button:hover {
+  background-color: #F4F7F5;
+  color: black;
+  cursor: pointer;
+}
+
+#button:active, #comment-submit:active {
+  font-weight: normal;
+  border: solid #1f5c99 5px;
+}
+
+#image-prev {
+  height: 50px;
+  width: 50px;
+}
+
 .nav-section a {
   color: white;
 }
 
+.nav-section a:hover {
+  border-bottom: solid white 2px;
+  color: black;
+}
+
 #sign-in-overlay, #user-image-overlay {
-  height: 1000px;
+  min-height: 550px;
+  max-height: 100%
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);;
   position: absolute;
@@ -48,12 +134,11 @@ a {
 
 .main > .container {
   background-color: white;
-  min-height: 800px;
+  min-height: 550px;
 }
 
 .main {
   background-color: #D3D3D3;
-  /*margin-top: 50px;*/
 }
 
 .footer {
@@ -101,11 +186,9 @@ a {
 }
 
 .login-box {
-  display: none;
-  width: 200px;
-  height: 200px;
+  display: inline-block;
   background-color: white;
-  margin: 10% auto;
+  margin: 10% 40%;
   border-radius: 20px;
 }
 
@@ -129,6 +212,10 @@ a {
   color: white;
   background-color: green;
   display: block;
+}
+
+#like-button:hover, #liked-button:hover, #dislike-button:hover, #disliked-button:hover {
+  cursor: pointer;
 }
 
 #like-count, #dislike-count {
@@ -200,7 +287,6 @@ a {
 #image-form {
   background-color: white;
   display: inline-block;
-  width: 200px;
   border-radius: 20px;
   padding: 20px;
   margin: 10% 40%;

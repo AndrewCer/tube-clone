@@ -6,15 +6,15 @@ block content
       h1 New Video
       form(action='/tube/new-video/' + userId, method='POST')
         label(for='name') Name:
-          input#name(type='text', name='name', autofocus)
+        input#name(type='text', name='name', autofocus, placeholder='Video Name Here')
         label(for='url') YouTube Url:
-          input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM')
+        input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM')
         label(for='description') Description
-          textarea#description(name='description')
+        textarea#description(name='description')
         input(style='display: none', type='text', name='views', value=0)
         input(style='display: none', type='text', name='likes')
         input(style='display: none', type='text', name='dislikes')
-        input(type='submit', value='Add Video')
-      a(href='/tube') To All Videos
+        br
+        input#button(type='submit', value='Add Video')
   .footer
     .container

@@ -4,11 +4,11 @@ block content
   p#user-id(style='display: none')= userId
   #user-image-overlay
     #image-form
-      label Image Preview:
-      img#image-preview(src='/images/futurama-clone.jpg')
+      label Preview:
+      img#image-prev(src='/images/futurama-clone.jpg')
       label(for='image-url') New Image Url:
-      input#image-url(type='text')
-      input(type='button', value='Preview')
+      input#image-url(type='text', placeholder='Image URL Here')
+      input#preview-button(type='button', value='Preview')
       input#update-image(type='button', value='Save')
       input#cancel-button(type='button', value='Cancel')
   .main

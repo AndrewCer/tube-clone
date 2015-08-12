@@ -3,7 +3,7 @@ var signInOverlay = document.getElementById('sign-in-overlay');
 var cancelButton = document.getElementById('cancel-button');
 var loginBox = document.getElementsByClassName('login-box')[0];
 var cancelButton = document.getElementById('cancel-button');
-//create event listner to close page  
+//create event listner to close page
 
 if (signInButton) {
   signInButton.addEventListener('click', function () {
@@ -16,8 +16,7 @@ if (signInButton) {
 }
 
 function unfade(element) {
-    var op = 0.1;  // initial opacity
-    element.style.display = 'block';
+    var op = 0.1;
     var timer = setInterval(function () {
         if (op >= 1){
             clearInterval(timer);

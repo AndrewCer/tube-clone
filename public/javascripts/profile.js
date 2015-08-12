@@ -1,6 +1,6 @@
 var editPictureButton = document.getElementById('edit-pic');
 var userImgOverlay = document.getElementById('user-image-overlay');
-var imagePreview = document.getElementById('image-preview');
+var imagePreview = document.getElementById('image-prev');
 var inputUrl = document.getElementById('image-url');
 var updateImageButton = document.getElementById('update-image');
 var userId = document.getElementById('user-id').innerHTML;

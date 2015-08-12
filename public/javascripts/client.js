@@ -78,4 +78,8 @@ commentSubmit.addEventListener('click', function () {
       console.log(xhr.responseText);
     }
   }
+  commentBox.className = '';
+  commentBox.style.height = '35px'
+  commentBox.innerHTML = "What's on Your Brain Noodle?"
+  commentSubmit.style.display = 'none';
 });
