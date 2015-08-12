@@ -2,6 +2,8 @@ var signInButton = document.getElementById('sign-in');
 var signInOverlay = document.getElementById('sign-in-overlay');
 var cancelButton = document.getElementById('cancel-button');
 var loginBox = document.getElementsByClassName('login-box')[0];
+var cancelButton = document.getElementById('cancel-button');
+//create event listner to close page
 
 if (signInButton) {
   signInButton.addEventListener('click', function () {
