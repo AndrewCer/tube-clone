@@ -212,10 +212,21 @@ textarea {
   color: white;
   background-color: green;
   display: block;
+  border: solid green 1px;
+  font-weight: bold;
 }
 
 #like-button:hover, #liked-button:hover, #dislike-button:hover, #disliked-button:hover {
   cursor: pointer;
+  background-color: white;
+}
+
+#like-button:hover, #liked-button:hover {
+  color: green
+}
+
+#dislike-button:hover, #disliked-button:hover {
+  color: red;
 }
 
 #like-count, #dislike-count {
@@ -225,6 +236,8 @@ textarea {
 #dislike-button, #disliked-button {
   color: white;
   background-color: red;
+  border: solid red 1px;
+  font-weight: bold;
 }
 
 #dislike-button-gray {
