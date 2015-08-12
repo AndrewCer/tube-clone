@@ -21,7 +21,6 @@ router.get('/', function(req, res, next) {
       userCookie = userCookie.capitalize();
       return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id, userImg: user.profileImg});
     });
-
   }
   else {
     res.render('index', { title: 'Tube Clone'});
@@ -48,7 +47,6 @@ router.get('/tube', function (req, res) {
   });
 });
 
-//show video w/ comments
 router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
   videos.findOne({_id: req.params.vidId}).then(function (video) {
@@ -83,16 +81,18 @@ router.get('/tube/video/:vidId', function (req, res) {
                   }
                 }
               }
-              userCookie = userCookie.capitalize();
-              if (dislikeAccum === true) {
-                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id, userImg: user.profileImg})
-              }
-              if (likeAccum === true) {
-                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, liked: true, userId: loggedUser._id, userImg: user.profileImg})
-              }
-              if (likeAccum === null && dislikeAccum === null) {
-                return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userId: loggedUser._id, userImg: user.profileImg})
-              }
+              users.findOne({userName: userCookie}).then(function (userInfo) {
+                userCookie = userCookie.capitalize();
+                if (dislikeAccum === true) {
+                  return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id, userImg: userInfo.profileImg})
+                }
+                if (likeAccum === true) {
+                  return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, liked: true, userId: loggedUser._id, userImg: userInfo.profileImg})
+                }
+                if (likeAccum === null && dislikeAccum === null) {
+                  return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userId: loggedUser._id, userImg: userInfo.profileImg})
+                }
+              });
             });
           }
         });
@@ -108,7 +108,9 @@ router.get('/tube/video/edit/:vidId', function (req, res) {
   else {
     var userCookie = req.session.user;
     videos.findOne({_id: req.params.vidId}).then(function (video) {
-      res.render('video-edit', {user: userCookie, video: video})
+      users.findOne({userName: userCookie}).then(function (user) {
+        res.render('video-edit', {user: userCookie, video: video, userImg: user.profileImg})
+      })
     });
   }
 });
@@ -196,8 +198,10 @@ router.get('/tube/logout', function (req, res) {
 router.get('/tube/new-video/:id', function (req, res) {
   var userCookie = req.session.user;
   if (userCookie) {
-    userCookie = userCookie.capitalize();
-    res.render('new-video', {user: userCookie, userId: req.params.id});
+    users.findOne({userName: userCookie}).then(function (user) {
+      userCookie = userCookie.capitalize();
+      res.render('new-video', {user: userCookie, userId: req.params.id, userImg: user.profileImg});
+    });
   }
   else {
     res.redirect('/tube/sign-up')

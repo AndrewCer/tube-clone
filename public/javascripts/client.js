@@ -10,25 +10,29 @@ var dislikeCount = document.getElementById('dislike-count');
 var likedButton = document.getElementById('liked-button');
 var dislikedButton = document.getElementById('disliked-button');
 
-likeButton.addEventListener('click', function () {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/tube/like/' + vidId + '/' + poster, true);
-  xhr.send(null);
-  likeCount.innerHTML = Number(likeCount.innerHTML) + 1;
-  likeButton.style.display = 'none';
-  likedButton.style.display = 'block';
-  dislikeButton.style.display = 'none';
-});
+if (likeButton) {
+  likeButton.addEventListener('click', function () {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/tube/like/' + vidId + '/' + poster, true);
+    xhr.send(null);
+    likeCount.innerHTML = Number(likeCount.innerHTML) + 1;
+    likeButton.style.display = 'none';
+    likedButton.style.display = 'block';
+    dislikeButton.style.display = 'none';
+  });
+}
 
-dislikeButton.addEventListener('click', function () {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/tube/dislike/' + vidId + '/' + poster, true);
-  xhr.send(null);
-  dislikeCount.innerHTML = Number(dislikeCount.innerHTML) + 1;
-  dislikeButton.style.display = 'none';
-  dislikedButton.style.display = 'block';
-  likeButton.style.display = 'none';
-});
+if (dislikeButton) {
+  dislikeButton.addEventListener('click', function () {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/tube/dislike/' + vidId + '/' + poster, true);
+    xhr.send(null);
+    dislikeCount.innerHTML = Number(dislikeCount.innerHTML) + 1;
+    dislikeButton.style.display = 'none';
+    dislikedButton.style.display = 'block';
+    likeButton.style.display = 'none';
+  });
+}
 
 commentBox.addEventListener('click', function () {
   commentBox.innerHTML = '';

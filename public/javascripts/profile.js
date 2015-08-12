@@ -5,6 +5,7 @@ var inputUrl = document.getElementById('image-url');
 var updateImageButton = document.getElementById('update-image');
 var userId = document.getElementById('user-id').innerHTML;
 var profileImg = document.getElementById('profile-image');
+var cancelButton = document.getElementById('cancel-button');
 
 editPictureButton.addEventListener('click', function () {
   userImgOverlay.style.display = 'inline-block';
@@ -12,6 +13,10 @@ editPictureButton.addEventListener('click', function () {
 
 inputUrl.addEventListener('change', function () {
   imagePreview.src = inputUrl.value;
+});
+
+cancelButton.addEventListener('click', function () {
+  userImgOverlay.style.display = 'none';
 });
 
 updateImageButton.addEventListener('click', function () {

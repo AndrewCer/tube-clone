@@ -27,11 +27,12 @@ html
       .container
         div.user-header
           if user
-            a(href='/tube/user/' + userId)
             if userImg
-              img#profile-image(src=userImg)
+              a(href='/tube/user/' + userId)
+                img#profile-image(src=userImg)
             else
-              img#profile-image(src='/images/futurama-clone.jpg')
+              a(href='/tube/user/' + userId)
+                img#profile-image(src='/images/futurama-clone.jpg')
           div.user-info
             if user
               a#dasboard-link(href='/tube/user/' + userId) #{user}'s Dashboard
