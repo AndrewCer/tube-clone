@@ -72,19 +72,15 @@ router.get('/tube/video/edit/:vidId', function (req, res) {
   }
   else {
     var userCookie = req.session.user;
-    videos.findOne({_id: req.params.vidId}).then(function (video) {
-      users.findOne({userName: userCookie}).then(function (user) {
-        res.render('video-edit', {user: userCookie, video: video, userImg: user.profileImg})
-      })
-    });
+    database.videoEdit(req.params.vidId, userCookie).then(function (returnObj) {
+      res.render('video-edit', {user: userCookie, video: returnObj.video, userImg: returnObj.userInfo.profileImg})
+    })
   }
 });
 
 router.post('/tube/video/edit/:vidId', function (req, res) {
   var formData = req.body
-  videos.update({_id: req.params.vidId}, {name: formData.name, url: formData.url,
-    description: formData.description, userId: formData.userId})
-    .then(function () {
+  database.videoEdit(req.params.vidId, null, formData).then(function () {
     res.redirect('/tube/video/' + req.params.vidId)
   });
 });
