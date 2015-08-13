@@ -14,11 +14,11 @@ html
           else
             form(action='/tube/login', method='POST')
               if nameError
-                p= nameError
+                p(style='color: red')= nameError
               label(for='user-name') User Name:
                 input#user-name(type='text', name='userName', autofocus)
               if passwordError
-                p= passwordError
+                p(style='color: red')= passwordError
               label(for='password') Password:
                 input#password(type='password', name='password')
               input#login-button(type='submit', value='Login')

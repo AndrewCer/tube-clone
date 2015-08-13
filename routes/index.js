@@ -120,10 +120,10 @@ router.post('/tube/sign-up', function (req, res) {
   if (validationArray.length > 0) {
     res.render('sign-up', {errors: validationArray, formData: formData});
   }
-  users.find({userName: formData.userName}).then(function (user) {
+  users.find({userName: formData.userName.toLowerCase()}).then(function (user) {
     if (user.length === 0) {
       return users.insert(userData).then(function (user) {
-        req.session.user = formData.userName
+        req.session.user = formData.userName.toLowerCase();
         return res.redirect('/tube/user/' + user._id);
       });
     }
@@ -135,10 +135,13 @@ router.post('/tube/sign-up', function (req, res) {
 
 router.post('/tube/login', function (req, res) {
   var loginData = req.body
+  var userCookie = req.session.user;
   users.findOne({userName: loginData.userName.toLowerCase()})
     .then(function (user) {
       if (user === null) {
-        return res.render('index', {nameError: 'Incorrect Username'})
+        database.topFive(userCookie).then(function (returnObj) {
+            return res.render('index', { nameError: 'Incorrect Username', title: 'Tube Clone', topVideos: returnObj.topVids});
+        });
       }
       var cryptCheck = bcrypt.compareSync(loginData.password, user.password)
       if (cryptCheck) {
@@ -146,7 +149,9 @@ router.post('/tube/login', function (req, res) {
         res.redirect('/tube/user/' + user._id);
       }
       else {
-        return res.render('index', {passowrdError: 'Incorrect password'})
+        database.topFive(userCookie).then(function (returnObj) {
+            return res.render('index', {passwordError: 'Incorrect password', nameError: 'Incorrect Username', title: 'Tube Clone', topVideos: returnObj.topVids});
+        });
       }
     });
 });
