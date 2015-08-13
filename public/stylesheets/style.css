@@ -257,8 +257,28 @@ textarea {
 }
 
 #user-comments {
-  border: solid black 1px;
   width: 50%;
+}
+
+.comment-output {
+  border: solid rgba(0, 0, 0, 0.1) 1px;
+}
+
+.single-comment {
+  padding: 10px;
+}
+
+.single-comment:nth-child(odd) {
+  background-color: #1f5c99;
+  color: white;
+}
+
+.new-single-comment {
+  padding: 10px;
+}
+
+#new-comments {
+  border: solid rgba(0, 0, 0, 0.1) 1px;
 }
 
 #comment-input {

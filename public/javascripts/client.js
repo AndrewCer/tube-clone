@@ -56,7 +56,7 @@ commentSubmit.addEventListener('click', function () {
   var commentDiv = document.createElement('div');
   var comment = document.createElement('p');
   var postedBy = document.createElement('p');
-  commentDiv.className = 'single-comment';
+  commentDiv.className = 'new-single-comment';
   comment.innerHTML = commentBox.value;
   postedBy.innerHTML = poster + ' said:';
   commentsDiv.appendChild(commentDiv);

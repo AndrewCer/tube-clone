@@ -54,10 +54,11 @@ block content
             input#comment-submit(type='button', value='Post')
         #new-comments
         if comments
-          for com in comments
-            .single-comment
-              p #{com.user} said:
-              p= com.comment
+          .comment-output
+            for com in comments
+              .single-comment
+                p #{com.user} said:
+                p= com.comment
       p#posted-by(style='display: none')= user
       p#video-id(style='display: none')= video._id
   .footer
