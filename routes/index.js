@@ -11,7 +11,7 @@ var cookieSession = require('cookie-session');
 
 // remove any reference to db in this file
 // move out any authorization code to separate middleware functions
-// even if they are specific toa  route - just pass 2 functions to router.get...
+// even if they are specific to a route - just pass 2 functions to router.get
 
 String.prototype.capitalize = function(){
     return this.toLowerCase().replace( /\b\w/g, function (m) {
@@ -57,15 +57,15 @@ router.get('/tube/video/:vidId', function (req, res) {
       return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userImg: returnObj.userInfo.profileImg})
     }
     else {
-          if (returnObj.dislikeTest === true) {
-            return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, disliked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
-          }
-          if (returnObj.likeTest === true) {
-            return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, liked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
-          }
-          if (returnObj.likeTest === null && returnObj.dislikeTest === null) {
-            return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
-          }
+      if (returnObj.dislikeTest === true) {
+        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, disliked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+      }
+      if (returnObj.likeTest === true) {
+        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, liked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+      }
+      if (returnObj.likeTest === null && returnObj.dislikeTest === null) {
+        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+      }
     }
   });
 });
@@ -90,24 +90,15 @@ router.post('/tube/video/edit/:vidId', function (req, res) {
 });
 
 router.get('/tube/user/:id', function (req, res) {
-  users.findOne({_id: req.params.id}).then(function (user) {
-    if (!req.session.user || req.session.user != user.userName) {
-      res.render('404', {error: 'You do not have access to this page'})
+  var userCookie = req.session.user;
+  database.userVideos(req.params.id, userCookie).then(function (returnObj) {
+    if (returnObj === false) {
+      return res.render('404', {error: 'You do not have access to this page'})
     }
     else {
-      var userCookie = req.session.user;
       userCookie = userCookie.capitalize();
-      //refactor to not contain for loop...perhaps using $in
-      videos.find({}).then(function (videos) {
-        var userVideos = []
-        for (var i = 0; i < videos.length; i++) {
-          if (videos[i].userId == req.params.id) {
-            userVideos.push(videos[i])
-          }
-        }
-        userVideos.reverse();
-        res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: userVideos, userImg: user.profileImg})
-      });
+      returnObj.userVids.reverse();
+      return res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: returnObj.userVids, userImg: returnObj.userInfo.profileImg})
     }
   });
 });
@@ -124,6 +115,7 @@ router.post('/tube/sign-up', function (req, res) {
   if (validationArray.length > 0) {
     res.render('sign-up', {errors: validationArray, formData: formData});
   }
+  
   users.find({userName: formData.userName.toLowerCase()}).then(function (user) {
     if (user.length === 0) {
       return users.insert(userData).then(function (user) {
@@ -195,7 +187,9 @@ router.post('/tube/new-video/:id', function (req, res) {
 
 router.post('/tube/vid-comment', function (req, res) {
   var commentData = JSON.parse(req.body.userComment);
-  comments.insert(commentData);
+  comments.insert(commentData).then(function () {
+    return res.writeHead(200, { "Content-Type": "text/html" });
+  })
 });
 
 router.get('/tube/delete/:id', function (req, res) {
@@ -209,7 +203,10 @@ router.get('/tube/delete/:id', function (req, res) {
 router.get('/tube/like/:vidId/:user', function (req, res) {
   videos.update({_id: req.params.vidId}, { $addToSet: { like: { $each: [ req.params.user.toLowerCase()] } } })
   .then(function () {
-    return users.update({userName: req.params.user.toLowerCase()}, { $addToSet: { like: { $each: [ req.params.vidId] } } })
+    return users.update({userName: req.params.user.toLowerCase()},
+    { $addToSet: { like: { $each: [ req.params.vidId] } } }).then(function () {
+      return res.writeHead(200, { "Content-Type": "text/html" });
+    })
   });
 });
 
@@ -219,14 +216,20 @@ router.get('/tube/like/:vidId/:user', function (req, res) {
 router.get('/tube/dislike/:vidId/:user', function (req, res) {
   videos.update({_id: req.params.vidId}, { $addToSet: { dislike: { $each: [ req.params.user.toLowerCase()] } } })
   .then(function () {
-    return users.update({userName: req.params.user.toLowerCase()}, { $addToSet: { dislike: { $each: [ req.params.vidId] } } })
+    return users.update({userName: req.params.user.toLowerCase()},
+    { $addToSet: { dislike: { $each: [ req.params.vidId] } } }).then(function () {
+      return res.writeHead(200, { "Content-Type": "text/html" });
+    });
   });
 });
 
 // TODO: can render before the database has successfully completed the operation
 router.post('/tube/update-pic/:userId', function (req, res) {
   users.update({_id: req.params.userId}, {$set: {profileImg: req.body.url}})
-  res.json('thanks!')
+  //does this qualify as closing the connection?
+  res.writeHead(200, { "Content-Type": "text/html" });
+  //or do i need to end it like this
+  // res.end("Ending this shiz");
 });
 
 module.exports = router;
