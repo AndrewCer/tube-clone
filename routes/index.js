@@ -9,6 +9,10 @@ var comments = db.get('comments');
 var bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
+// remove any reference to db in this file
+// move out any authorization code to separate middleware functions
+// even if they are specific toa  route - just pass 2 functions to router.get...
+
 String.prototype.capitalize = function(){
     return this.toLowerCase().replace( /\b\w/g, function (m) {
         return m.toUpperCase();
@@ -161,6 +165,7 @@ router.get('/tube/logout', function (req, res) {
   res.redirect('/');
 });
 
+// TODO: move to database.js
 router.get('/tube/new-video/:id', function (req, res) {
   var userCookie = req.session.user;
   if (userCookie) {
@@ -174,6 +179,7 @@ router.get('/tube/new-video/:id', function (req, res) {
   }
 });
 
+// TODO: move to database.js
 router.post('/tube/new-video/:id', function (req, res) {
   var formData = req.body
   users.findOne({_id: req.params.id}).then(function (user) {
@@ -198,6 +204,8 @@ router.get('/tube/delete/:id', function (req, res) {
   });
 });
 
+// TODO: make sure there is a response
+// TODO: move this out to database.js
 router.get('/tube/like/:vidId/:user', function (req, res) {
   videos.update({_id: req.params.vidId}, { $addToSet: { like: { $each: [ req.params.user.toLowerCase()] } } })
   .then(function () {
@@ -205,6 +213,9 @@ router.get('/tube/like/:vidId/:user', function (req, res) {
   });
 });
 
+// TODO: make sure there is a response
+// TODO: move this out to database.js
+// could be just sending a HEAD response
 router.get('/tube/dislike/:vidId/:user', function (req, res) {
   videos.update({_id: req.params.vidId}, { $addToSet: { dislike: { $each: [ req.params.user.toLowerCase()] } } })
   .then(function () {
@@ -212,6 +223,7 @@ router.get('/tube/dislike/:vidId/:user', function (req, res) {
   });
 });
 
+// TODO: can render before the database has successfully completed the operation
 router.post('/tube/update-pic/:userId', function (req, res) {
   users.update({_id: req.params.userId}, {$set: {profileImg: req.body.url}})
   res.json('thanks!')

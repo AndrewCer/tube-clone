@@ -312,6 +312,7 @@ textarea {
 
 #comment-submit {
   display: none;
+  margin-bottom: 11px;
 }
 
 .uploaded-videos {
