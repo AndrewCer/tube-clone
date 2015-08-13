@@ -154,13 +154,12 @@ router.get('/tube/logout', function (req, res) {
   res.redirect('/');
 });
 
-// TODO: move to database.js
 router.get('/tube/new-video/:id', function (req, res) {
   var userCookie = req.session.user;
   if (userCookie) {
-    users.findOne({userName: userCookie}).then(function (user) {
+    database.userFind(userCookie).then(function (returnObj) {
       userCookie = userCookie.capitalize();
-      res.render('new-video', {user: userCookie, userId: req.params.id, userImg: user.profileImg});
+      res.render('new-video', {user: userCookie, userId: req.params.id, userImg: returnObj.userInfo.profileImg});
     });
   }
   else {
