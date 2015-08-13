@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var validator = require("../lib/validation.js").validation;
+var database = require('../lib/database.js');
 var db = require('monk')(process.env.MONGO_URI);
 var users = db.get('users');
 var videos = db.get('videos');
@@ -15,23 +16,14 @@ String.prototype.capitalize = function(){
 };
 
 router.get('/', function(req, res, next) {
-  var sortedVideos = null;
-  var topFive = [];
-  videos.find().then(function (vids) {
-    sortedVideos = vids.sort(function(a, b){return b.views-a.views});
-    for (var i = 0; i < 4; i++) {
-      topFive.push(sortedVideos[i]);
-    }
-  }).then(function () {
-    var userCookie = req.session.user;
+  var userCookie = req.session.user;
+  database.topFive(userCookie).then(function (returnObj) {
     if (req.session.user) {
-      users.findOne({userName: userCookie}).then(function (user) {
-        userCookie = userCookie.capitalize();
-        return res.render('index', { title: 'Tube Clone', user: userCookie, userId: user._id, userImg: user.profileImg, topVideos: topFive});
-      });
+      userCookie = userCookie.capitalize();
+      return res.render('index', { title: 'Tube Clone', user: userCookie, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg, topVideos: returnObj.topVids});
     }
     else {
-      res.render('index', { title: 'Tube Clone', topVideos: topFive});
+      return res.render('index', { title: 'Tube Clone', topVideos: returnObj.topVids});
     }
   });
 });
@@ -42,71 +34,35 @@ router.get('/style', function (req, res) {
 
 router.get('/tube', function (req, res) {
   var userCookie = req.session.user;
-  videos.find({}).then(function (videos) {
-    videos.reverse();
+  database.videoUser(userCookie).then(function (returnObj) {
+    returnObj.videos.reverse();
     if (userCookie) {
-      users.findOne({userName: userCookie}).then(function (user) {
-        userCookie = userCookie.capitalize();
-        res.render('tube-show', {allVideos: videos, user: userCookie, userId: user._id, userImg: user.profileImg});
-      });
+      userCookie = userCookie.capitalize();
+      return res.render('tube-show', {allVideos: returnObj.videos, user: userCookie, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg});
     }
     else {
-      res.render('tube-show', {allVideos: videos, user: userCookie});
+      return res.render('tube-show', {allVideos: returnObj.videos, user: userCookie});
     }
   });
 });
 
 router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
-  videos.findOne({_id: req.params.vidId}).then(function (video) {
-    var viewCount = Number(video.views) + 1;
-    users.findOne({_id: video.userId}).then(function (user) {
-      comments.find({videoId: req.params.vidId}).then(function (comments) {
-        comments.reverse();
-        videos.update({_id: req.params.vidId}, {$set: {views: viewCount}})
-        .then(function () {
-          if (!userCookie) {
-            return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userImg: user.profileImg})
+  database.video(req.params.vidId, userCookie).then(function (returnObj) {
+    if (!userCookie) {
+      return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userImg: returnObj.userInfo.profileImg})
+    }
+    else {
+          if (returnObj.dislikeTest === true) {
+            return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, disliked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
           }
-          else {
-            users.findOne({userName: userCookie.toLowerCase()})
-            .then(function (loggedUser) {
-              var likeAccum = null;
-              var dislikeAccum = null;
-              if (loggedUser) {
-                console.log(loggedUser);
-                if (loggedUser.like) {
-                  for (var i = 0; i < loggedUser.like.length; i++) {
-                    if (loggedUser.like[i] == video._id) {
-                      likeAccum = true;
-                    }
-                  }
-                }
-                if (loggedUser.dislike) {
-                  for (var i = 0; i < loggedUser.dislike.length; i++) {
-                    if (loggedUser.dislike[i] == video._id) {
-                      dislikeAccum = true;
-                    }
-                  }
-                }
-              }
-              users.findOne({userName: userCookie}).then(function (userInfo) {
-                userCookie = userCookie.capitalize();
-                if (dislikeAccum === true) {
-                  return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, disliked: true, userId: loggedUser._id, userImg: userInfo.profileImg})
-                }
-                if (likeAccum === true) {
-                  return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, liked: true, userId: loggedUser._id, userImg: userInfo.profileImg})
-                }
-                if (likeAccum === null && dislikeAccum === null) {
-                  return res.render('video', {user: userCookie, video: video, userInfo: user, comments: comments, userId: loggedUser._id, userImg: userInfo.profileImg})
-                }
-              });
-            });
+          if (returnObj.likeTest === true) {
+            return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, liked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
           }
-        });
-      });
-    });
+          if (returnObj.likeTest === null && returnObj.dislikeTest === null) {
+            return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+          }
+    }
   });
 });
 

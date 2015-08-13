@@ -12,11 +12,11 @@ block content
         label(for='name') Current Title:
         input#name(type='text', name='name', value=video.name)
         label(for='description') Current Description:
-        textarea#description(name='description')=video.description
+        textarea#description(style='display: block;', name='description')=video.description
         input.hide-me(type='text', value=video.url, name='url')
         input.hide-me(type='text', value=video.userId, name='userId')
-        input(type='submit', value='Update!')
+        input#button(type='submit', value='Update!')
       br
-      a(href='/tube/delete/' + video._id) Delete
+      a#dislike-button(href='/tube/delete/' + video._id) Delete
   .footer
     .container

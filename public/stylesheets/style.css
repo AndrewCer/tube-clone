@@ -61,6 +61,10 @@ textarea {
   width: 300px;
 }
 
+#name {
+  font-size: 1em;
+}
+
 #button, #comment-submit {
   border: solid #1f5c99 2px;
   background-color: #1f5c99;
