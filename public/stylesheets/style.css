@@ -14,7 +14,6 @@ body {
   height: 50px;
   width: 50px;
   float: right;
-
 }
 
 #logout {
@@ -225,16 +224,16 @@ textarea {
   font-weight: bold;
 }
 
-#like-button:hover, #liked-button:hover, #dislike-button:hover, #disliked-button:hover {
+#like-button:hover, #dislike-button:hover{
   cursor: pointer;
   background-color: white;
 }
 
-#like-button:hover, #liked-button:hover {
+#like-button:hover {
   color: green
 }
 
-#dislike-button:hover, #disliked-button:hover {
+#dislike-button:hover {
   color: red;
 }
 

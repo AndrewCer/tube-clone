@@ -22,7 +22,10 @@ block content
         else
           input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM')
         label(for='description') Description
-        textarea#description(name='description')
+        if formData
+          textarea#description(name='description')=formData.description
+        else
+          textarea#description(name='description')
         input(style='display: none', type='text', name='views', value=0)
         input(style='display: none', type='text', name='likes')
         input(style='display: none', type='text', name='dislikes')
