@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var validator = require("../lib/validation.js");
 var database = require('../lib/database.js');
-var db = require('monk')(process.env.MONGO_URI);
-var users = db.get('users');
-var videos = db.get('videos');
-var comments = db.get('comments');
+// var db = require('monk')(process.env.MONGO_URI);
+// var users = db.get('users');
+// var videos = db.get('videos');
+// var comments = db.get('comments');
 var bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
@@ -194,43 +194,33 @@ router.post('/tube/new-video/:id', function (req, res) {
 
 router.post('/tube/vid-comment', function (req, res) {
   var commentData = JSON.parse(req.body.userComment);
-  comments.insert(commentData).then(function () {
+  database.addComment(commentData)
+  .then(function () {
     return res.writeHead(200, { "Content-Type": "text/html" });
-  })
+  });
 });
 
 router.get('/tube/delete/:id', function (req, res) {
-  videos.remove({_id: req.params.id}).then(function () {
+  database.deleteVid(req.params.id)
+  .then(function () {
     res.redirect('/tube');
   });
 });
 
-// TODO: make sure there is a response
-// TODO: move this out to database.js
 router.get('/tube/like/:vidId/:user', function (req, res) {
-  videos.update({_id: req.params.vidId}, { $addToSet: { like: { $each: [ req.params.user.toLowerCase()] } } })
-  .then(function () {
-    return users.update({userName: req.params.user.toLowerCase()},
-    { $addToSet: { like: { $each: [ req.params.vidId] } } }).then(function () {
-      return res.writeHead(200, { "Content-Type": "text/html" });
-    })
-  });
-});
-
-// TODO: make sure there is a response
-// TODO: move this out to database.js
-// could be just sending a HEAD response
-router.get('/tube/dislike/:vidId/:user', function (req, res) {
-  videos.update({_id: req.params.vidId}, { $addToSet: { dislike: { $each: [ req.params.user.toLowerCase()] } } })
-  .then(function () {
-    return users.update({userName: req.params.user.toLowerCase()},
-    { $addToSet: { dislike: { $each: [ req.params.vidId] } } }).then(function () {
+  database.likeAndDislike(req.params.vidId, req.params.user, true, undefined)
+    .then(function () {
       return res.writeHead(200, { "Content-Type": "text/html" });
     });
-  });
 });
 
-// TODO: can render before the database has successfully completed the operation
+router.get('/tube/dislike/:vidId/:user', function (req, res) {
+  database.likeAndDislike(req.params.vidId, req.params.user, undefined, true)
+    .then(function () {
+      return res.writeHead(200, { "Content-Type": "text/html" });
+    });
+});
+
 router.post('/tube/update-pic/:userId', function (req, res) {
   users.update({_id: req.params.userId}, {$set: {profileImg: req.body.url}})
   //does this qualify as closing the connection?
