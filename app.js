@@ -1,8 +1,8 @@
 var express = require('express');
+require('dotenv').load();
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-require('dotenv').load();
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session')
 var bodyParser = require('body-parser');
