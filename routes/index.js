@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var validator = require("../lib/validation.js").validation;
+var validator = require("../lib/validation.js");
 var database = require('../lib/database.js');
 var db = require('monk')(process.env.MONGO_URI);
 var users = db.get('users');
@@ -111,7 +111,7 @@ router.post('/tube/sign-up', function (req, res) {
   var formData = req.body;
   var hash = bcrypt.hashSync(formData.password, 8);
   var userData = {userName : formData.userName.toLowerCase(), age : formData.age, password : hash}
-  var validationArray = validator(formData.userName, formData.password, formData.passwordCheck);
+  var validationArray = validator.validation(formData.userName, formData.password, formData.passwordCheck);
   if (validationArray.length > 0) {
     res.render('sign-up', {errors: validationArray, formData: formData});
   }
@@ -168,18 +168,28 @@ router.get('/tube/new-video/:id', function (req, res) {
 });
 
 router.post('/tube/new-video/:id', function (req, res) {
-  var formData = req.body
-  database.insertVideo(req.params.id, undefined)
-  .then(function (returnObj) {
-    formData.userId = returnObj.userInfo._id;
-    var urlId = formData.url;
-    urlId = urlId.split('=')[1];
-    formData.url = urlId;
-    database.insertVideo(undefined, formData)
-    .then(function () {
-      res.redirect('/tube')
+  var formData = req.body;
+  var userCookie = req.session.user;
+  var validationCheck = validator.newVideo(formData);
+  if (validationCheck.nameError || validationCheck.urlError ) {
+    database.userFind(userCookie)
+    .then(function (returnObj) {
+      res.render('new-video', {user: userCookie, userId: req.params.id, userImg: returnObj.userInfo.profileImg, inputError: validationCheck, formData: formData});
     });
-  })
+  }
+  else {
+    database.insertVideo(req.params.id, undefined)
+    .then(function (returnObj) {
+      formData.userId = returnObj.userInfo._id;
+      var urlId = formData.url;
+      urlId = urlId.split('=')[1];
+      formData.url = urlId;
+      database.insertVideo(undefined, formData)
+      .then(function () {
+        res.redirect('/tube')
+      });
+    });
+  }
 });
 
 router.post('/tube/vid-comment', function (req, res) {

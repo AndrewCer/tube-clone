@@ -6,9 +6,21 @@ block content
       h1 New Video
       form(action='/tube/new-video/' + userId, method='POST')
         label(for='name') Name:
-        input#name(type='text', name='name', autofocus, placeholder='Video Name Here')
+        if inputError
+          if inputError.nameError
+            p(style='color: red')= inputError.nameError
+        if formData
+          input#name(type='text', name='name', autofocus, placeholder='Video Name Here', value=formData.name)
+        else
+          input#name(type='text', name='name', autofocus, placeholder='Video Name Here')
         label(for='url') YouTube Url:
-        input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM')
+        if inputError
+          if inputError.urlError
+            p(style='color: red')= inputError.urlError
+        if formData
+          input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM', value=formData.url)
+        else
+          input#url(type='text', name='url', placeholder='https://www.youtube.com/watch?v=QkdXacbjlwM')
         label(for='description') Description
         textarea#description(name='description')
         input(style='display: none', type='text', name='views', value=0)
