@@ -129,17 +129,17 @@ router.post('/tube/sign-up', function (req, res) {
 router.post('/tube/login', function (req, res) {
   var loginData = req.body
   var userCookie = req.session.user;
-  users.findOne({userName: loginData.userName.toLowerCase()})
+  database.userFind(loginData.userName.toLowerCase())
     .then(function (user) {
-      if (user === null) {
+      if (user.userInfo === null) {
         database.topFive(userCookie).then(function (returnObj) {
             return res.render('index', { nameError: 'Incorrect Username', title: 'Tube Clone', topVideos: returnObj.topVids});
         });
       }
-      var cryptCheck = bcrypt.compareSync(loginData.password, user.password)
+      var cryptCheck = bcrypt.compareSync(loginData.password, user.userInfo.password)
       if (cryptCheck) {
         req.session.user = loginData.userName
-        res.redirect('/tube/user/' + user._id);
+        res.redirect('/tube/user/' + user.userInfo._id);
       }
       else {
         database.topFive(userCookie).then(function (returnObj) {
@@ -167,15 +167,16 @@ router.get('/tube/new-video/:id', function (req, res) {
   }
 });
 
-// TODO: move to database.js
 router.post('/tube/new-video/:id', function (req, res) {
   var formData = req.body
-  users.findOne({_id: req.params.id}).then(function (user) {
-    formData.userId = user._id;
+  database.insertVideo(req.params.id, undefined)
+  .then(function (returnObj) {
+    formData.userId = returnObj.userInfo._id;
     var urlId = formData.url;
     urlId = urlId.split('=')[1];
     formData.url = urlId;
-    videos.insert(formData).then(function (videos) {
+    database.insertVideo(undefined, formData)
+    .then(function () {
       res.redirect('/tube')
     });
   })
