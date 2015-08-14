@@ -9,10 +9,15 @@ var database = require('../lib/database.js');
 var bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
-// remove any reference to db in this file
-// move out any authorization code to separate middleware functions
-// even if they are specific to a route - just pass 2 functions to router.get
 
+function isAuthenticated(req, res, next) {
+  if (!req.session.user || req.session.user != req.session.user) {
+    res.render('404', {error: 'You do not have access to this page'});
+  }
+  else {
+    return next();
+  }
+}
 String.prototype.capitalize = function(){
     return this.toLowerCase().replace( /\b\w/g, function (m) {
         return m.toUpperCase();
@@ -70,16 +75,11 @@ router.get('/tube/video/:vidId', function (req, res) {
   });
 });
 
-router.get('/tube/video/edit/:vidId', function (req, res) {
-  if (!req.session.user || req.session.user != req.session.user) {
-    res.render('404', {error: 'You do not have access to this page'})
-  }
-  else {
-    var userCookie = req.session.user;
-    database.videoEdit(req.params.vidId, userCookie).then(function (returnObj) {
-      res.render('video-edit', {user: userCookie, video: returnObj.video, userImg: returnObj.userInfo.profileImg})
-    })
-  }
+router.get('/tube/video/edit/:vidId', isAuthenticated, function (req, res) {
+  var userCookie = req.session.user;
+  database.videoEdit(req.params.vidId, userCookie).then(function (returnObj) {
+    res.render('video-edit', {user: userCookie, video: returnObj.video, userImg: returnObj.userInfo.profileImg})
+  })
 });
 
 router.post('/tube/video/edit/:vidId', function (req, res) {
@@ -89,17 +89,12 @@ router.post('/tube/video/edit/:vidId', function (req, res) {
   });
 });
 
-router.get('/tube/user/:id', function (req, res) {
+router.get('/tube/user/:id', isAuthenticated, function (req, res) {
   var userCookie = req.session.user;
   database.userVideos(req.params.id, userCookie).then(function (returnObj) {
-    if (returnObj === false) {
-      return res.render('404', {error: 'You do not have access to this page'})
-    }
-    else {
       userCookie = userCookie.capitalize();
       returnObj.userVids.reverse();
-      return res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: returnObj.userVids, userImg: returnObj.userInfo.profileImg})
-    }
+      return res.render('user-page', {user: userCookie, userId: req.params.id, userVideos: returnObj.userVids, userImg: returnObj.userInfo.profileImg});
   });
 });
 
