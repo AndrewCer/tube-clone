@@ -38,9 +38,9 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.get('/style', function (req, res) {
-  res.render('style');
-});
+// router.get('/style', function (req, res) {
+//   res.render('style');
+// });
 
 router.get('/tube', function (req, res) {
   var userCookie = req.session.user;
