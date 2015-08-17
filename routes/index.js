@@ -108,12 +108,13 @@ router.post('/tube/sign-up', function (req, res) {
     res.render('sign-up', {errors: validationArray, formData: formData});
   }
   database.signUp(formData.userName.toLowerCase(), userData).then(function (returnObj) {
+    if (returnObj === null){
+      console.log('hey hey');
+      return res.render('sign-up', {errors: ['That User Name already exists'], formData: formData});
+    }
     if (returnObj.userInfo) {
       req.session.user = formData.userName.toLowerCase();
       return res.redirect('/tube/user/' + returnObj.userInfo._id);
-    }
-    else {
-      return res.render('sign-up', {errors: ['That User Name already exists'], formData: formData});
     }
   });
 });
@@ -176,7 +177,7 @@ router.post('/tube/new-video/:id', function (req, res) {
       var urlId = formData.url;
       urlId = urlId.split('=')[1];
       formData.url = urlId;
-      database.insertVideo(undefined, formData)
+      return database.insertVideo(undefined, formData)
       .then(function () {
         res.redirect('/tube')
       });
