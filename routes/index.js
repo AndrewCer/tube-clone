@@ -2,10 +2,6 @@ var express = require('express');
 var router = express.Router();
 var validator = require("../lib/validation.js");
 var database = require('../lib/database.js');
-// var db = require('monk')(process.env.MONGO_URI);
-// var users = db.get('users');
-// var videos = db.get('videos');
-// var comments = db.get('comments');
 var bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
