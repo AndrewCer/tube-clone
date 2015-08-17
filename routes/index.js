@@ -56,17 +56,17 @@ router.get('/tube/video/:vidId', function (req, res) {
   var userCookie = req.session.user;
   database.video(req.params.vidId, userCookie).then(function (returnObj) {
     if (!userCookie) {
-      return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userImg: returnObj.userInfo.profileImg})
+      return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.vidPoster, comments: returnObj.comments, userImg: returnObj.userInfo.profileImg})
     }
     else {
       if (returnObj.dislikeTest === true) {
-        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, disliked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.vidPoster, comments: returnObj.comments, disliked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
       }
       if (returnObj.likeTest === true) {
-        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, liked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.vidPoster, comments: returnObj.comments, liked: true, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
       }
       if (returnObj.likeTest === null && returnObj.dislikeTest === null) {
-        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.userInfo, comments: returnObj.comments, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
+        return res.render('video', {user: userCookie, video: returnObj.video, userInfo: returnObj.vidPoster, comments: returnObj.comments, userId: returnObj.userInfo._id, userImg: returnObj.userInfo.profileImg})
       }
     }
   });
