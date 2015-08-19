@@ -217,10 +217,7 @@ router.get('/tube/dislike/:vidId/:user', function (req, res) {
 router.post('/tube/update-pic/:userId', function (req, res) {
   database.updateProfilePic(req.params.userId, req.body.url)
   .then(function () {
-    //does this qualify as closing the connection?
     res.writeHead(200, { "Content-Type": "text/html" });
-    //or do i need to end it like this
-    // res.end("Ending this shiz");
   });
 });
 
