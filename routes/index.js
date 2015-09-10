@@ -5,7 +5,6 @@ var database = require('../lib/database.js');
 var bcrypt = require('bcrypt');
 var cookieSession = require('cookie-session');
 
-
 function isAuthenticated(req, res, next) {
   if (!req.session.user || req.session.user != req.session.user) {
     res.render('404', {error: 'You do not have access to this page'});
